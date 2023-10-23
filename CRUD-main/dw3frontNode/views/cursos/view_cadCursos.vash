@@ -16,6 +16,7 @@
               <div class="mb-1" style="display: none">
                 <input type="number" name="cursoid" class="form-control" id="cursoid" />
               </div>
+              
               <div class="mb-1 row ">
                 <label for="codigo" class="col-sm-2 col-xxl-1 col-form-label required">Código:</label>
                 <div class="col-sm-4 col-xxl-2">

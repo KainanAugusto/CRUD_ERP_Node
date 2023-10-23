@@ -18,11 +18,12 @@ function authenticationMiddleware(req, res, next) {
 
 // GET methods
 router.get('/', authenticationMiddleware, contasAPApp.getAllContasAPagar);
-router.get('/insertContaAPagar', authenticationMiddleware, contasAPApp.insertContaAPagar);
-router.get('/viewContasAPagar/:id/:oper', authenticationMiddleware, contasAPApp.openContaAPagarInsert);
+router.get('/openContaInsert', authenticationMiddleware, contasAPApp.openContaAPagarInsert);
+router.get('/openContaUpdate/:id', authenticationMiddleware, contasAPApp.openContaAPagarUpdate);
 
 // POST methods
 router.post('/insertContaAPagar', authenticationMiddleware, contasAPApp.insertContaAPagar);
+router.post('/getDados', authenticationMiddleware, contasAPApp.getDados);
 router.post('/deleteContaApagar', authenticationMiddleware, contasAPApp.deleteContaAPagar);
 router.post('/viewContasAPagar', authenticationMiddleware, contasAPApp.openContaAPagarInsert);
 

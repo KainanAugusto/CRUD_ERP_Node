@@ -2,9 +2,9 @@ const Pool = require('pg').Pool
 //@ Eu posso substituir as configurações abaixo por valores do arquivo .env
 const pool = new Pool({
   user: 'postgres',
-  host: '10.131.130.172',
+  host: 'localhost',
   database: 'dw3',
-  password: '',
+  password: 'postgres',
   port: 5432,
 })
 

@@ -49,6 +49,7 @@ const insertContaAPagar = async (contaREGPar) => {
 const updateContaAPagar = async (contaREGPar) => {
     let linhasAfetadas;
     let msg = "ok";
+    console.log("ID para atualizar:", contaREGPar.id);
 
     try {
         linhasAfetadas = (
