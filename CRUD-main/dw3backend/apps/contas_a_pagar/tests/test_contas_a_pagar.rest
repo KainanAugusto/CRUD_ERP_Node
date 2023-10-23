@@ -1,0 +1,59 @@
+### teste de buscar aluno por ID
+POST http://localhost:40000/Login HTTP/1.1
+content-type: application/json
+//Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NzQ3ODI5NzksInVzZXJuYW1lIjoicXdlIn0.SlYYCm8J6wlpb3i1jJcSvhSz6VjwKvzPOxza8P6-hzo
+
+{    
+    "username": "qwe",
+    "password": "qwe"
+}
+
+### teste de buscar todas as contas a pagar
+GET http://localhost:40000/getAllContasAPagar HTTP/1.1
+
+
+### teste para buscar a conta por ID
+POST http://localhost:40000/getContaAPagarById HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InF3ZSIsImlhdCI6MTY5NzA0MDQ3MywiZXhwIjoxNjk3MDQxMDczfQ.Ls8GeaSUMsfIKIzlLHAin7vhLgSKHDWZdkassldF4kI
+
+{
+    "contaID": 2
+}
+
+
+### teste de insercao de conta a pagar
+POST http://localhost:40000/insertContaAPagar HTTP/1.1
+Content-Type: application/json
+Authorization: BearereyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InF3ZSIsImlhdCI6MTY5NzA0MDQ3MywiZXhwIjoxNjk3MDQxMDczfQ.Ls8GeaSUMsfIKIzlLHAin7vhLgSKHDWZdkassldF4kI
+
+{
+    "descricao": "",
+    "valor": 400.0,
+    "data_vencimento": "16-10-2023",
+    "data_pagamento": "14-10-2023",
+    "deleted": false
+}
+
+### Teste de atualizacao de conta a pagar
+POST http://localhost:40000/updateContaAPagar HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InF3ZSIsImlhdCI6MTY5MTQzNTg3MSwiZXhwIjoxNjkxNDM2NDcxfQ.hAh0VyRfEXvYmhunlJALD-qda8pYr2zzAHobn1yua20
+
+{
+    "id": 3,
+    "descricao": "Locacao",
+    "valor": 400.0,
+    "data_vencimento": "16-10-2023",
+    "data_pagamento": "14-10-2023",
+    "deleted": true
+}
+
+### Teste de delecao de conta a pagar
+POST http://localhost:40000/deleteContaAPagar HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InF3ZSIsImlhdCI6MTY5MTQzNTg3MSwiZXhwIjoxNjkxNDM2NDcxfQ.hAh0VyRfEXvYmhunlJALD-qda8pYr2zzAHobn1yua20
+
+{
+    "id": 2
+}
