@@ -41,7 +41,7 @@
                                     <td>@registro.descricao</td>
                                     <td>@registro.valor</td>
                                     <td>@registro.data_vencimento</td>
-                                    <td>@registro.data_pagamento</td>                                  
+                                    <td>@registro.data_pagamento</td>                                 
                                 </tr>
                                 })
                             </tbody>

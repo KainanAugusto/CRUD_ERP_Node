@@ -34,10 +34,14 @@ const openContaAPagarInsert = async (req, res) => {
 
 // @ Função para validar campos no formulário
 function validateForm(regFormPar) {
-  if (regFormPar.contaId === '') {
-    regFormPar.contaId = 0;
+  //const validado = validaForm(contaData);
+  
+  console.log('Conta ID em validateForm = ',regFormPar.contaID);
+
+  if (regFormPar.contaID === '') {
+    regFormPar.contaID = 0;
   } else {
-    regFormPar.contaId = parseInt(regFormPar.contaId);
+    regFormPar.contaID = parseInt(regFormPar.contaID);
   }
 
   regFormPar.ativo = regFormPar.ativo === 'true';
@@ -54,7 +58,7 @@ const openContaAPagarUpdate = (req, res) =>
     userName = req.session.userName;
     token = req.session.token;
     try {
-      if (req.method == "GET") {
+      if (req.method === "GET") {
         oper = "u";
         const id = req.params.id;
         parseInt(id);
@@ -80,7 +84,7 @@ const insertContaAPagar = async (req, res) => {
   try {
     if (req.method === 'POST') {
       const regPost = validateForm(req.body);
-      regPost.contaId = 0;
+      regPost.contaID = 0;
       const resp = await axios.post(
         process.env.SERVIDOR_DW3 + '/insertContaAPagar',
         regPost,
@@ -108,9 +112,9 @@ const updateContaAPagar = async (req, res) => {
   const token = req.session.token;
   try {
     if (req.method === 'POST') {
-      const regPost = validateForm(req.body);
+      const regPost = req.body;
       const resp = await axios.post(
-        process.env.SERVIDOR_DW3 + '/updateContasAPagar',
+        process.env.SERVIDOR_DW3 + '/updateContaAPagar',
         regPost,
         {
           headers: {
@@ -123,11 +127,13 @@ const updateContaAPagar = async (req, res) => {
       if (resp.data.status === 'ok') {
         res.json({ status: 'ok', mensagem: 'Conta a pagar atualizada com sucesso!' });
       } else {
-                res.json({ status: 'erro', mensagem: 'Erro ao atualizar conta a pagar!' });
+        res.json({ status: 'erro', mensagem: 'Erro ao atualizar conta a pagar!' });
       }
     }
   } catch (error) {
     console.log('[ctlContasAPagar.js|updateContasAPagar] Try Catch: Erro não identificado', error);
+    // Enviar a mensagem de erro para o cliente
+    res.json({ status: 'erro', mensagem: 'Erro não identificado', detalhes: error.message });
   }
 };
 
@@ -175,13 +181,16 @@ const getDados = (req, res) =>
 const deleteContaAPagar = async (req, res) => {
   const token = req.session.token;
   try {
+    console.log('Entrei no frontcontroller deleteContaAPagar');
+
     if (req.method === 'POST') {
       const regPost = validateForm(req.body);
-      regPost.contaId = parseInt(regPost.contaId);
+      regPost.contaID = parseInt(regPost.contaID);
+      console.log('Dados enviados:', regPost);
       const resp = await axios.post(
-        process.env.SERVIDOR_DW3 + '/deleteContasAPagar',
+        process.env.SERVIDOR_DW3 + '/deleteContaAPagar',
         {
-          contaId: regPost.contaId,
+          contaID: regPost.contaID,
         },
         {
           headers: {

@@ -10,6 +10,7 @@ const getAllContasAPagar = async () => {
 };
 
 const getContaAPagarById = async (contaIDPar) => {
+    
     return (
         await db.query(
             "SELECT id, descricao, valor, data_vencimento, data_pagamento, deleted " +
@@ -28,13 +29,12 @@ const insertContaAPagar = async (contaREGPar) => {
     try {
         linhasAfetadas = (
             await db.query(
-                "INSERT INTO public.contas_a_pagar values (default, $1, $2, $3, $4, $5);",
+                "INSERT INTO public.contas_a_pagar values (default, $1, $2, $3, $4, false);",
                 [
                     contaREGPar.descricao,
                     contaREGPar.valor,
                     contaREGPar.data_vencimento,
                     contaREGPar.data_pagamento,
-                    contaREGPar.deleted,
                 ]
             )
         ).rowCount;
@@ -49,9 +49,12 @@ const insertContaAPagar = async (contaREGPar) => {
 const updateContaAPagar = async (contaREGPar) => {
     let linhasAfetadas;
     let msg = "ok";
-    console.log("ID para atualizar:", contaREGPar.id);
+
+    console.log("ID para atualizar:", contaREGPar);
 
     try {
+        console.log('entrei no try');
+
         linhasAfetadas = (
             await db.query(
                 " UPDATE public.contas_a_pagar SET" +
@@ -62,7 +65,7 @@ const updateContaAPagar = async (contaREGPar) => {
                 " deleted=$6" +
                 " WHERE id = $1;",
                 [
-                    contaREGPar.id,
+                    contaREGPar.contaid,
                     contaREGPar.descricao,
                     contaREGPar.valor,
                     contaREGPar.data_vencimento,
@@ -82,13 +85,17 @@ const deleteContaAPagar = async (contaREGPar) => {
     let linhasAfetadas;
     let msg = "ok";
 
+    console.log("ID para atualizar na exclusão:", contaREGPar.contaID);
+
     try {
+        console.log('Entrei no backmodel deleteContaAPagar');
+
         linhasAfetadas = (
             await db.query(
                 " UPDATE contas_a_pagar" +
                 " SET deleted = true " +
                 " WHERE id = $1",
-                [contaREGPar.id]
+                [contaREGPar.contaID]
             )
         ).rowCount;
     } catch (error) {

@@ -1,9 +1,23 @@
 @html.extend('layout', function(model){
 
     @html.block('content', function(model){
+        <div class="container-fluid mb-4"> <!-- Aqui foi adicionado a classe mb-4 -->
+            <h1 class="mt-4 text-center">Bem-vindo ao Sistema ERP Projetinho!</h1>
+            <h3 class="text-center">Olá, @model.userName!</h3>
 
-        <h3>Olá @model.title</h3>
-
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card border-0 shadow">
+                        <div class="card-body text-center">
+                            <img src="/image/erp2_updated.png" alt="Bem-vindo" class="img-fluid rounded mb-4" style="max-width: 100%; height: auto;">
+                            <h4 class="card-title">Estamos felizes por tê-lo conosco!</h4>
+                            <p class="card-text">
+                                Navegue pelo menu à esquerda para explorar todos os recursos que temos a oferecer. Se tiver alguma dúvida, estamos aqui para ajudar!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     })
-
 })

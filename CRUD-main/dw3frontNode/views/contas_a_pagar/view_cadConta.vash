@@ -13,9 +13,6 @@
         <div class="card-body">
           <div class="col-sm-6 col-xxl-12">
             <form id="form">
-              <div class="mb-1" style="display: none">
-                <input type="number" name="id" class="form-control" id="id" />
-              </div>
 
               <div class="mb-1" style="display: none">
                 <input type="number" name="contaid" class="form-control" id="contaid" />
@@ -25,7 +22,7 @@
               <div class="mb-1 row">
                 <label for="descricao" class="col-sm-2 col-xxl-1 col-form-label required">Descrição:</label>
                 <div class="col-sm-4 col-xxl-3">
-                  <input type="text" name="descricao" class="form-control-plaintext" id="descricao" maxlength="255" required readonly />
+                  <input type="text" name="descricao" class="form-control" id="descricao" maxlength="255" required/>
                 </div>
               </div>
 
@@ -33,7 +30,7 @@
               <div class="mb-1 row">
                 <label for="valor" class="col-sm-2 col-xxl-1 col-form-label required">Valor:</label>
                 <div class="col-sm-4 col-xxl-3">
-                  <input type="text" name="valor" class="form-control-plaintext" id="valor" required readonly />
+                  <input type="text" name="valor" class="form-control" id="valor" required/>
                 </div>
               </div>
 
@@ -41,7 +38,7 @@
               <div class="mb-1 row">
                 <label for="data_vencimento" class="col-sm-2 col-xxl-1 col-form-label required">Data Vencimento:</label>
                 <div class="col-sm-4 col-xxl-3">
-                  <input type="date" name="data_vencimento" class="form-control-plaintext" id="data_vencimento" required readonly />
+                  <input type="date" name="data_vencimento" class="form-control" id="data_vencimento" required />
                 </div>
               </div>
 
@@ -49,7 +46,7 @@
               <div class="mb-1 row">
                 <label for="data_pagamento" class="col-sm-2 col-xxl-1 col-form-label">Data Pagamento:</label>
                 <div class="col-sm-4 col-xxl-3">
-                  <input type="date" name="data_pagamento" class="form-control-plaintext" id="data_pagamento" readonly />
+                  <input type="date" name="data_pagamento" class="form-control" id="data_pagamento"/>
                 </div>
               </div>
 
@@ -106,6 +103,8 @@
     $("#form").each(function() {
       this.reset();
     });
+    
+    desabilitaForm();
 
     // Mostra os botões de acordo com o tipo da operação
     if (oper == "c") {
@@ -127,43 +126,63 @@
     $("#descricao").focus();
   }
 
-  //@ Busca os dados de acordo com o ID para serem alterados
-  async function getDados(idBuscaPar) {
-    console.log("[getDados] idBusca", idBuscaPar);
-
-    try {
-      const resp = await axios.post(
-        "/contas_a_pagar/getContaAPagarById", {
-          idBusca: idBuscaPar
-        }, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (resp.data.status == "ok") {
-        $("#contaid").val(resp.data.registro.contaID);
-        $("#descricao").val(resp.data.registro.descricao);
-        $("#valor").val(resp.data.registro.descricao);
-        $("#data_vencimento").val(resp.data.registro.descricao);
-        $("#data_pagamento").val(resp.data.registro.descricao);
-        if (!resp.data.registro.deleted) {
-          $("#ativo").prop("checked", true);
-        } else {
-          $("#ativo").prop("checked", false);
-        }
-
-        } else {
-        alert("Houve erro ao buscar os dados da conta a pagar!");
-      }
-    } catch (error) {
-      alert("[view_cadconta|getDados]Ocorreu um erro inesperado!" + error);
-    }
+  const convertToDateFormat = (isoString) => {
+      const date = new Date(isoString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Adiciona zero à esquerda se for um único dígito
+      const day = String(date.getDate()).padStart(2, '0'); // Adiciona zero à esquerda se for um único dígito
+    
+      return `${year}-${month}-${day}`;
   }
 
+  //@ Busca os dados de acordo com o ID para serem alterados
+  async function getDados(idBuscaPar) {
+    console.log("[getDados] Função chamada"); // Correção 1: Checagem de fluxo
+    console.log("[getDados] idBusca", idBuscaPar); // Log já existente para idBusca
+
+    try {
+        const resp = await axios.post(
+            "/contas_a_pagar/getDados", {
+                idBusca: idBuscaPar
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        
+        console.log("Dados recebidos: ", resp.data); // Correção 1: Checagem de dados recebidos
+
+        if (resp.data.status == "ok") {
+            contaID = idBuscaPar;
+            console.log("Conta ID recebido: ", contaID); // Correção 1: Checagem do ID
+            const formattedVencimento = convertToDateFormat(resp.data.registro.data_vencimento);
+            const formattedPagamento = convertToDateFormat(resp.data.registro.data_pagamento);
+            
+            // Correção 2: Usar jQuery para definir o valor
+            $("#contaid").val(parseInt(resp.data.registro.contaID));
+            $("#descricao").val(resp.data.registro.descricao);
+            $("#valor").val(resp.data.registro.valor);
+            $("#data_vencimento").val(formattedVencimento);
+            $("#data_pagamento").val(formattedPagamento);
+            
+            if (!resp.data.registro.deleted) {
+                $("#deleted").prop("checked", false);
+            } else {
+                $("#deleted").prop("checked", true);
+            }
+        } else {
+            alert("Houve erro ao buscar os dados da conta a pagar!");
+        }
+    } catch (error) {
+        alert("[view_cadconta|getDados]Ocorreu um erro inesperado!" + error);
+    }
+}
+
+
   //@ Valida o formulário antes de salvá-lo
-  function validaForm(formDataPar) {
-    var validado = true;
+function validaForm(contaData) {
+  var validado = true;
     $("#form input, #form select").each(function(index) {
       var input = $(this);
       if (
@@ -172,26 +191,28 @@
         String(input.val()).length == 0
       ) {
         alert("Campo obrigatório");
-        //console.log('Type: ' + input.attr('type') + ' ID: ' + input.attr('id') + ' Name: ' + input.attr('name') + ' Value: ' + input.val() + ' Obrigatori: ' + input.prop("required"));
+        console.log('Type: ' + input.attr('type') + ' ID: ' + input.attr('id') + ' Name: ' + input.attr('name') + ' Value: ' + input.val() + ' Obrigatório: ' + input.prop("required"));
         $(input).focus();
         validado = false;
         return false;
       }
     });
 
-    if (formDataPar.get("ativo") == "on") {
-      formDataPar.set("ativo", true);
+    // Agora usando contaData diretamente, já que é o argumento da função
+    if (contaData.deleted === "on") {
+      contaData.deleted = true;
     } else {
-      formDataPar.set("ativo", false);
+      contaData.deleted = false;
     }
-    formDataPar.set("deleted", false);
+    contaData.deleted = false;
 
-    return validado;
-  }
+  return validado;
+}
+
 
 
   //@ Salva os dados
-  async function btnSalvar() {
+async function btnSalvar() {
     const formData = new FormData(form);
 
     const validado = validaForm(formData);
@@ -209,6 +230,7 @@
       if (resp.data.status == "ok") {
         alert(resp.data.mensagem);
         limpaForm();
+        window.open("/contas_a_pagar", "_self");
       } else {
         alert("Houve um erro: " + resp.data.mensagem);
       }
@@ -234,7 +256,8 @@
     $("#data_pagamento").prop("class", "form-control");
     $("#data_pagamento").prop("readonly", false);
 
-    $("#ativo").prop("disabled", false);
+
+    $("#deleted").prop("disabled", false);
   }
 
   //@ Habilita a alteração
@@ -247,38 +270,61 @@
     habilitaForm();
   }
 
+  function desabilitaForm() {
+  $("#descricao").prop("readonly", true);
+  $("#valor").prop("readonly", true);
+  $("#data_vencimento").prop("readonly", true);
+  $("#data_pagamento").prop("readonly", true);
+  $("#deleted").prop("disabled", true);
+}
 
-//@ Salva a alteração
+  //@ Salva a alteração
   //@ console.log("[view_cadCursos|btnSalvarAlteracao] :", )
   async function btnSalvarAlteracao() {
-    const formData = new FormData(form);
-    const validado = validaForm(formData);
+    // Criação de um objeto para guardar os dados do formulário
+    const contaData = {
+        contaid: contaID,
+        descricao: document.getElementById("descricao").value,
+        valor: document.getElementById("valor").value,
+        data_vencimento: document.getElementById("data_vencimento").value,
+        data_pagamento: document.getElementById("data_pagamento").value,
+        deleted: document.getElementById("deleted").checked
+    };
+
+    // Validação do formulário
+    const validado = validaForm(contaData);
     if (!validado) {
-      return;
+        return;
     }
 
     try {
-      resp = await axios.post("/cursos/updateCursos", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+        // Realiza a chamada para o back-end
+        console.log('Enviando dados:', contaData);
+        const resp = await axios.post("/contas_a_pagar/updateContaAPagar", contaData, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log('Resposta recebida:', resp);
 
-      if (resp.data.status == "ok") {
-        alert(resp.data.mensagem);
-        window.open("/contas_a_pagar/openContaUpdate/" + String($("#contaid").val()), "_self");
-      } else {
-        alert("Houve um erro: " + resp.data.mensagem);
-      }
+
+        // Lida com a resposta do back-end
+        if (resp.data.status === "ok") {
+            alert(resp.data.mensagem);
+            window.open("/contas_a_pagar/openContaUpdate/" + String(contaData.contaid), "_self");
+        } else {
+            alert("Houve um erro: " + resp.data.mensagem);
+        }
     } catch (error) {
-      alert("[view_cadConta|btnSalvarAlteracao]Ocorreu um erro inesperado!" + error);
+        alert("[view_cadConta|btnSalvarAlteracao]Ocorreu um erro inesperado!" + error);
     }
-  }
+}
 
-   //@ Cancela a alteração
+
+  //@ Cancela a alteração
   //@ console.log("[view_cadCursos|btnCancelarAlteracao] Valor do id", $("#cursoid").val());    
   async function btnCancelarAlteracao() {
-    window.open("/contas_a_pagar/openContaUpdate/" + String($("#contaid").val()), "_self");
+    window.open("/contas_a_pagar/openContaUpdate/" + String(contaID), "_self");
   }
 
 
@@ -294,7 +340,7 @@
 
     try {
       resp = await axios.post("/contas_a_pagar/deleteContaAPagar", {
-        cursoid: formData.get("contaid"),
+        contaID: contaID,
       }, {
         headers: {
           "Content-Type": "application/json",
@@ -312,7 +358,7 @@
     }
   }
 
-  </script>
+</script>
 
 <style>
   .required:after {

@@ -24,6 +24,7 @@ router.get('/openContaUpdate/:id', authenticationMiddleware, contasAPApp.openCon
 // POST methods
 router.post('/insertContaAPagar', authenticationMiddleware, contasAPApp.insertContaAPagar);
 router.post('/getDados', authenticationMiddleware, contasAPApp.getDados);
+router.post('/updateContaAPagar', authenticationMiddleware, contasAPApp.updateContaAPagar);
 router.post('/deleteContaApagar', authenticationMiddleware, contasAPApp.deleteContaAPagar);
 router.post('/viewContasAPagar', authenticationMiddleware, contasAPApp.openContaAPagarInsert);
 

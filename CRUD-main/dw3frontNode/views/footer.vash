@@ -1,12 +1,22 @@
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+<footer class="py-2 bg-dark text-white mt-auto">
+    <div class="container-fluid px-4">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="mb-0">Copyright &copy; Projetinho 2023</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="#" class="text-white me-3 small">Privacy Policy</a>
+                <a href="#" class="text-white small">Terms &amp; Conditions</a>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-12 text-center small">
+                Siga-nos: 
+                <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white me-2"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
