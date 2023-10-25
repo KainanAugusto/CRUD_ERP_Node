@@ -38,19 +38,17 @@ function validateForm(regFormPar) {
   
   console.log('Conta ID em validateForm = ',regFormPar.contaID);
 
-  if (regFormPar.contaID === '') {
-    regFormPar.contaID = 0;
+  if (regFormPar.contaid === undefined) {
+    regFormPar.contaid = 0;
   } else {
-    regFormPar.contaID = parseInt(regFormPar.contaID);
+    regFormPar.contaid = parseInt(regFormPar.contaid);
   }
 
-  regFormPar.ativo = regFormPar.ativo === 'true';
-  regFormPar.deleted = regFormPar.deleted === 'true';
 
   return regFormPar;
 }
 
-//@ Abre formulário de cadastro de cursos
+//@ Abre formulário de cadastro de contas
 const openContaAPagarUpdate = (req, res) =>
 
   (async () => {

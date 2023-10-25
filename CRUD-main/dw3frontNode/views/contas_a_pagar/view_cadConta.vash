@@ -51,10 +51,11 @@
               </div>
 
               <!-- Checkbox Deleted -->
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="deleted" id="deleted" disabled />
-                <label class="form-check-label" for="deleted"> Removido </label>
+              <div class="form-check" hidden>
+                  <input class="form-check-input" type="checkbox" name="deleted" id="deleted" disabled />
+                  <label class="form-check-label" for="deleted"> Removido </label>
               </div>
+
 
             </form>
           </div>
@@ -122,7 +123,7 @@
       await getDados(idBusca);
     }
 
-    //Coloca o curso no primeiro campo do formulário
+    //Coloca o contas a pagar no primeiro campo do formulário
     $("#descricao").focus();
   }
 
@@ -220,6 +221,11 @@ async function btnSalvar() {
       return;
     }
 
+    // Verifica se data_pagamento está vazio e atribui data_vencimento a ele
+    if (!formData.get("data_pagamento")) {
+        formData.set("data_pagamento", formData.get("data_vencimento"));
+    }
+
     try {
       resp = await axios.post("/contas_a_pagar/insertContaAPagar", formData, {
         headers: {
@@ -279,7 +285,7 @@ async function btnSalvar() {
 }
 
   //@ Salva a alteração
-  //@ console.log("[view_cadCursos|btnSalvarAlteracao] :", )
+  //@ console.log("[view_cadContasAPagar|btnSalvarAlteracao] :", )
   async function btnSalvarAlteracao() {
     // Criação de um objeto para guardar os dados do formulário
     const contaData = {
@@ -296,7 +302,9 @@ async function btnSalvar() {
     if (!validado) {
         return;
     }
-
+    if (!contaData.data_pagamento) {
+          contaData.data_pagamento = contaData.data_vencimento;
+      }
     try {
         // Realiza a chamada para o back-end
         console.log('Enviando dados:', contaData);
@@ -321,15 +329,13 @@ async function btnSalvar() {
 }
 
 
-  //@ Cancela a alteração
-  //@ console.log("[view_cadCursos|btnCancelarAlteracao] Valor do id", $("#cursoid").val());    
+  //@ Cancela a alteração    
   async function btnCancelarAlteracao() {
     window.open("/contas_a_pagar/openContaUpdate/" + String(contaID), "_self");
   }
 
 
-//@ Remove curso
-  //@ console.log("[view_cadCursos|btnSalvarAlteracao] :", )
+//@ Remove conta
   async function btnRemover() { 
 
     var confirma = confirm("Deseja realmente remover o registro?");
