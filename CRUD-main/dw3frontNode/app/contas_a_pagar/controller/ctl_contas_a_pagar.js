@@ -1,10 +1,18 @@
 const axios = require('axios');
 
+
 // @ Abre o formulário de manutenção de contas a pagar
 const getAllContasAPagar = async (req, res) => {
+  const token = req.cookies.token;  
   const userName = req.session.userName;
   try {
-    const resp = await axios.get(process.env.SERVIDOR_DW3 + '/getAllContasAPagar', {});
+    const resp = await axios.get(process.env.SERVIDOR_DW3 + '/getAllContasAPagar', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+
+    });
     res.render('contas_a_pagar/view_manutencao', {
       title: 'Manutenção de Contas a Pagar',
       data: resp.data,
@@ -35,8 +43,8 @@ const openContaAPagarInsert = async (req, res) => {
 // @ Função para validar campos no formulário
 function validateForm(regFormPar) {
   //const validado = validaForm(contaData);
-  
-  console.log('Conta ID em validateForm = ',regFormPar.contaID);
+
+  console.log('Conta ID em validateForm = ', regFormPar.contaID);
 
   if (regFormPar.contaid === undefined) {
     regFormPar.contaid = 0;
@@ -139,7 +147,7 @@ const updateContaAPagar = async (req, res) => {
 //@ Recupera os dados das contas
 const getDados = (req, res) =>
   (async () => {
-    const contaID = parseInt(req.body.idBusca);    
+    const contaID = parseInt(req.body.idBusca);
     const token = req.session.token;
 
     console.log("[ctl_contas_a_pagar.js|getDados] valor id :", contaID);
@@ -148,7 +156,7 @@ const getDados = (req, res) =>
       const resp = await axios.post(
         process.env.SERVIDOR_DW3 + "/getContaAPagarById",
         {
-          contaID: contaID, 
+          contaID: contaID,
         },
         {
           headers: {
@@ -164,14 +172,14 @@ const getDados = (req, res) =>
         res.json({ status: "erro", mensagem: "Resposta inesperada do servidor." });
       }
 
-    } catch (error) { 
+    } catch (error) {
       console.log(
         "[ctl_contas_a_pagar.js|getDados] Try Catch: Erro não identificado",
         error  // Corrigido para 'error'
       );
       res.json({ status: "erro", mensagem: "Erro interno do servidor." });
     }
-    
+
   })();
 
 
